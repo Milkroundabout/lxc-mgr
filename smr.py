@@ -17,13 +17,13 @@ class SMRContainer:
     def __init__(self,namestr):
         self.con = lxc.Container(namestr)
         self.name = re.sub(smr_prefix,'',namestr)
-        if self.con.state == 'RUNNING':
-            self.running = True
-            self.ips = self.con.get_ips()
-        else:
-            self.running = False
-            self.ips = ['-']
-            
+
+    @property
+    def ips(self):
+        lst = ['-']
+        if self.con.running and self.con.get_ips():
+            lst = self.con.get_ips()
+        return lst
         
     def __str__(self):
         return "{0.name:24} {0.con.state:16} {0.ips[0]}".format(self)
