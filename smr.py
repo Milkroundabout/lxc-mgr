@@ -71,6 +71,11 @@ def do_start_cons(cons):
         if not c.con.running:
             c.con.start()
 
+def do_stop_cons(cons):
+    for c in cons:
+        if c.con.running:
+            c.con.stop()
+
 
 if mode == 'list' :
     do_print_cons(containers)
@@ -78,5 +83,7 @@ if mode == 'list' :
 if mode == 'start' :
     do_start_cons(containers)
 
+if mode == 'stop' :
+    do_stop_cons(containers)
     
 
