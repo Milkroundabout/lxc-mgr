@@ -77,7 +77,10 @@ def do_stop_cons(cons):
         if c.con.running:
             c.con.stop()
 
-
+def do_shell_cons(cons):
+    for c in cons:
+        c.con.attach_wait(lxc.attach_run_command, ["su", "-" ,"cms"])
+    
 if mode == 'list' :
     do_print_cons(containers)
 
@@ -88,3 +91,5 @@ if mode == 'stop' :
     do_stop_cons(containers)
     
 
+if mode == 'shell' :
+    do_shell_cons(containers)
