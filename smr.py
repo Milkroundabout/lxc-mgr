@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import lxc
 import re
 import sys
