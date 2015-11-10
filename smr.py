@@ -1,5 +1,6 @@
 import lxc
 import re
+import sys
 
 # this is a prefix on all the smr lxc container names
 smr_prefix = 'con-smr-'
@@ -27,11 +28,44 @@ class SMRContainer:
     def __str__(self):
         return "{0.name:24} {0.con.state:16} {0.ips[0]}".format(self)
 
-containers = lxc.list_containers()
+def init_containers ():
+    containers = lxc.list_containers()
 
-smr_containers = [ SMRContainer(con) for con in containers if re.match(rxp, con) ]
+    smr_containers = [ SMRContainer(con)
+                       for con in containers
+                       if re.match(rxp, con) ]
+    return smr_containers
 
-for c in smr_containers:
-    print(c)
+containers = init_containers()
+
+def parse_cmd (cmdlist):
+    default_mode = 'list'
+    default_target = 'all'
+    if len(cmdlist) > 1 :
+        mode = cmdlist[1]
+    else :
+        mode = default_mode
+    if len(cmdlist) > 2 :
+        target = cmdlist[2]
+    else:
+        target = default_target
+    return [mode,target]
+    
+
+
+[mode,target] = parse_cmd(sys.argv)
+
+def do_list_containers(containers,target):
+    if target == 'ALL':
+        lst = containers
+    else:
+        lst = [ c for c in containers if c.name == target ]
+    for c in lst:
+        print(c)
+
+
+if mode == 'list' :
+    do_list_containers(containers,target)
+
     
 
