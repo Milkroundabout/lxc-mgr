@@ -1,7 +1,6 @@
 import lxc
 import re
 
-
 # this is a prefix on all the smr lxc container names
 smr_prefix = 'con-smr-'
 
@@ -28,7 +27,6 @@ class SMRContainer:
     def __str__(self):
         return "{0.name:24} {0.con.state:16} {0.ips[0]}".format(self)
 
-containers = lxc.list_containers("test")
 
 smr_containers = [ SMRContainer(con) for con in containers if re.match(rxp, con) ]
 
