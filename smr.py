@@ -46,26 +46,29 @@ def parse_cmd (cmdlist):
     else :
         mode = default_mode
     if len(cmdlist) > 2 :
-        target = cmdlist[2]
+        target = cmdlist[2:]
     else:
         target = default_target
     return [mode,target]
     
+def filter_containers(containers,target):
+    lst = containers
+    if target !=  'all':
+        lst = [ c for c in containers if c.name in target ]
+    return lst
+    
 
 
 [mode,target] = parse_cmd(sys.argv)
+containers = filter_containers(containers,target)
 
-def do_list_containers(containers,target):
-    if target == 'ALL':
-        lst = containers
-    else:
-        lst = [ c for c in containers if c.name == target ]
-    for c in lst:
+def do_print_cons(containers):
+    for c in containers:
         print(c)
 
 
 if mode == 'list' :
-    do_list_containers(containers,target)
+    do_print_cons(containers)
 
     
 
