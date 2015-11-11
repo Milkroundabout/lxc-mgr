@@ -7,7 +7,7 @@ import sys
 smr_prefix = 'con-smr-'
 
 # this is the name of all the smr instances
-machines = [ 'smr', 'shed', 'candidate-signups', 'smr-domain' ]
+machines = [ 'smr', 'shed', 'candidate-signups', 'smr-domain', 'dev' ]
 
 # make a regexp that matches the interesting smr lxc names
 # using the prifix and the machine names
