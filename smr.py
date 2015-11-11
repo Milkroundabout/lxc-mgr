@@ -37,7 +37,7 @@ def init_containers ():
                        if re.match(rxp, con) ]
     return smr_containers
 
-containers = init_containers()
+
 
 def parse_cmd (cmdlist):
     default_mode = 'list'
@@ -60,9 +60,6 @@ def filter_containers(containers,target):
     
 
 
-[mode,target] = parse_cmd(sys.argv)
-containers = filter_containers(containers,target)
-
 def do_print_cons(containers):
     for c in containers:
         print(c)
@@ -80,6 +77,11 @@ def do_stop_cons(cons):
 def do_shell_cons(cons):
     for c in cons:
         c.con.attach_wait(lxc.attach_run_command, ["su", "-" ,"cms"])
+
+# program starts
+        
+[mode,target] = parse_cmd(sys.argv)
+containers = filter_containers(init_containers(),target)
     
 if mode == 'list' :
     do_print_cons(containers)
