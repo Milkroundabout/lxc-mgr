@@ -76,7 +76,7 @@ def do_stop_cons(cons):
 
 def do_shell_cons(cons):
     for c in cons:
-        c.con.attach_wait(lxc.attach_run_command, ["su", "-" ,"cms"])
+        c.con.attach_wait(lxc.attach_run_command, ["bash", "-l"])
 
 # program starts
         
