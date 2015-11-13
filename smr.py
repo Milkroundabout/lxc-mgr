@@ -68,6 +68,7 @@ def do_start_cons(cons):
     for c in cons:
         if not c.con.running:
             c.con.start()
+            c.con.attach_wait(lxc.attach_run_command,["hostname", c.name])
 
 def do_stop_cons(cons):
     for c in cons:
