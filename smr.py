@@ -79,6 +79,11 @@ def do_shell_cons(cons):
     for c in cons:
         c.con.attach_wait(lxc.attach_run_command, ["bash", "-l"])
 
+def do_print_ansible_inventory(cons):
+    print("ansible inventory")
+
+def do_print_ansible_host(cons):
+    print("ansible host")
 
 # program starts
         
@@ -91,6 +96,11 @@ if re.match('--(?:host|list)\Z',mode) : # long flags for ansible inventory
 
 containers = filter_containers(init_containers(),target)
 
+if mode == 'ansible-list':
+    do_print_ansible_inventory(containers)
+
+if mode == 'ansible-host':
+    do_print_ansible_host(containers)
     
 if mode == 'list' :
     do_print_cons(containers)
