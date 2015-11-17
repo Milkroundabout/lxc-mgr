@@ -83,11 +83,14 @@ def do_shell_cons(cons):
 # program starts
         
 [mode,target] = parse_cmd(sys.argv)
-containers = filter_containers(init_containers(),target)
 
 if re.match('--(?:host|list)\Z',mode) : # long flags for ansible inventory
-    mode = re.sub('\A--','',mode)
-    print("ansible mode {}".format(mode))
+    mode = 'ansible' + re.sub('\A--','',mode)
+    if mode == 'ansible-list':
+        target == 'all'
+
+containers = filter_containers(init_containers(),target)
+
     
 if mode == 'list' :
     do_print_cons(containers)
