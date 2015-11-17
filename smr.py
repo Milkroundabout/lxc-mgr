@@ -85,7 +85,7 @@ def do_shell_cons(cons):
 [mode,target] = parse_cmd(sys.argv)
 
 if re.match('--(?:host|list)\Z',mode) : # long flags for ansible inventory
-    mode = 'ansible' + re.sub('\A--','',mode)
+    mode = 'ansible-' + re.sub('\A--','',mode)
     if mode == 'ansible-list':
         target == 'all'
 
