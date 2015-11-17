@@ -2,6 +2,7 @@
 import lxc
 import re
 import sys
+import json
 
 # this is a prefix on all the smr lxc container names
 smr_prefix = 'con-smr-'
@@ -80,10 +81,12 @@ def do_shell_cons(cons):
         c.con.attach_wait(lxc.attach_run_command, ["bash", "-l"])
 
 def do_print_ansible_inventory(cons):
-    print("ansible inventory")
+    hostnames = [c.name for c in cons]
+    json.dump( {"smr" : hostnames}, sys.stdout )
+        
 
 def do_print_ansible_host(cons):
-    print("ansible host")
+    print("{}")
 
 # program starts
         
@@ -93,6 +96,8 @@ if re.match('--(?:host|list)\Z',mode) : # long flags for ansible inventory
     mode = 'ansible-' + re.sub('\A--','',mode)
     if mode == 'ansible-list':
         target == 'all'
+
+
 
 containers = filter_containers(init_containers(),target)
 
