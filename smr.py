@@ -2,12 +2,14 @@
 import lxc
 import re
 import sys
+import json
+import os
 
 # this is a prefix on all the smr lxc container names
 smr_prefix = 'con-smr-'
 
 # this is the name of all the smr instances
-machines = [ 'smr', 'shed', 'candidate-signups', 'smr-domain', 'dev' ]
+machines = [ 'smr', 'shed', 'candidate-signups', 'smr-domain', 'dev', 'website']
 
 # make a regexp that matches the interesting smr lxc names
 # using the prifix and the machine names
