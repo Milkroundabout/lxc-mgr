@@ -7,6 +7,22 @@ restarting many such environments slightly more convenient
 
 the tool is a mixture of lxc api calls and wappers around the lxc-* shell commands
 
+it has a simple verb noun syntax
+
+    smr <verb> <noun>
+
+where verb is one of a set of known commands list, start, stop, shell
+and noun corresponds to a container short name
+
+if no verb is supplied, the default is assumed (list)
+if no noun is supplied, the verb is applied to all of the known nouns
+
+e.g.
+- `smr` -> list all containers
+- `smr start` -> ask all containers to start
+- `smr stop foo` -> ask container foo to stop
+
+
 ## example usage
 
 listing all known smr containers
@@ -51,3 +67,11 @@ bring up a shell on the dev container
     
     # smr shell dev
     user@dev $>
+
+start all containers
+
+    # smr start
+
+stop all containers
+
+    # smr stop
