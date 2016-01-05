@@ -1,0 +1,47 @@
+---
+- hosts: localhost
+  name: provision a new lxc host
+  sudo: True
+
+  vars:
+    con_prefix: con-smr
+    con_name: ansible
+    fq_con_name: '{{ con_prefix }}-{{ con_name }}'
+    backing_store: aufs
+    lxc_base_dir: '/var/lib/lxc/{{ fq_con_name }}'
+    con_config_file: '{{ lxc_base_dir }}/config'
+    hostname_file: '{{ lxc_base_dir }}/delta0/etc/hostname'
+
+  tasks:
+    - name: clone lxc from base
+      command: >
+        lxc-clone con-smr-base
+        -n {{ fq_con_name }}
+        -s -B{{ backing_store }}
+        creates={{ con_config_file }}
+
+    - name: set hostname in lxc config
+      replace: >
+        dest={{ hostname_file }}
+        regexp='^.*$'
+        replace='{{ con_name }}'
+
+    - name: start the container up
+      command: lxc-start -n {{ fq_con_name }} -d
+
+    - name: register the new host as a target
+      add_host: >
+        name=container
+        ansible_ssh_host={{ con_name }}.local.lxc
+        ansible_ssh-user=cms
+
+- name: check dynamic host
+  hosts: container
+  sudo: False
+
+  tasks:
+    - name: git config
+      command: git config --global {{ item }}
+      with_items:
+        - user.name 'cms'
+        - user.email 'cms@milkroundabout.com'
