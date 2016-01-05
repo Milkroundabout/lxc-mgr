@@ -36,6 +36,11 @@
         ansible_ssh_host={{ con_name }}.local.lxc
         ansible_ssh-user={{ username }}
 
+    - name: wait for ssh server to be running
+      wait_for: host={{ con_name}}.local.lxc port=22
+
+# these tasks will run in the new container
+
 - name: setup new host
   hosts: container
   sudo: False
