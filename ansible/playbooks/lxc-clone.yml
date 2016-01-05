@@ -46,8 +46,8 @@
   sudo: False
 
   tasks:
-    - name: git config
-      command: git config --global {{ item }} creates=
-      with_items:
-        - user.name '{{ ansible_ssh_user }}'
-        - user.email '{{ ansible_ssh_user }}@milkroundabout.com'
+    - name: set username correctly for git config
+      shell: >
+        git config --global user.name '{{ ansible_ssh_user }}'  &&
+        git config --global user.email '{{ ansible_ssh_user }}@milkroundabout.com'
+        creates=~/.gitconfig
