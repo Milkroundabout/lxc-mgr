@@ -11,6 +11,7 @@
     lxc_base_dir: '/var/lib/lxc/{{ fq_con_name }}'
     con_config_file: '{{ lxc_base_dir }}/config'
     hostname_file: '{{ lxc_base_dir }}/delta0/etc/hostname'
+    username: '{{ ansible_user_id }}'
 
   tasks:
     - name: clone lxc from base
@@ -33,15 +34,15 @@
       add_host: >
         name=container
         ansible_ssh_host={{ con_name }}.local.lxc
-        ansible_ssh-user=cms
+        ansible_ssh-user={{ username }}
 
-- name: check dynamic host
+- name: setup new host
   hosts: container
   sudo: False
 
   tasks:
     - name: git config
-      command: git config --global {{ item }}
+      command: git config --global {{ item }} creates=
       with_items:
-        - user.name 'cms'
-        - user.email 'cms@milkroundabout.com'
+        - user.name '{{ ansible_ssh_user }}'
+        - user.email '{{ ansible_ssh_user }}@milkroundabout.com'
