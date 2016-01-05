@@ -9,7 +9,8 @@ import os
 smr_prefix = 'con-smr-'
 
 # this is the name of all the smr instances
-machines = [ 'smr', 'shed', 'candidate-signups', 'smr-domain', 'dev', 'website']
+machines = [ 'smr', 'shed', 'candidate-signups', 'smr-domain', 'dev',
+             'website', 'floorplan', 'companies' ]
 
 # make a regexp that matches the interesting smr lxc names
 # using the prifix and the machine names
@@ -27,7 +28,7 @@ class SMRContainer:
         if self.con.running and self.con.get_ips():
             lst = self.con.get_ips()
         return lst
-        
+
     def __str__(self):
         return "{0.name:24} {0.con.state:16} {0.ips[0]}".format(self)
 
@@ -53,13 +54,13 @@ def parse_cmd (cmdlist):
     else:
         target = default_target
     return [mode,target]
-    
+
 def filter_containers(containers,target):
     lst = containers
     if target !=  'all':
         lst = [ c for c in containers if c.name in target ]
     return lst
-    
+
 
 
 def do_print_cons(containers):
@@ -82,10 +83,10 @@ def do_shell_cons(cons):
         c.con.attach_wait(lxc.attach_run_command, ["bash", "-l"])
 
 # program starts
-        
+
 [mode,target] = parse_cmd(sys.argv)
 containers = filter_containers(init_containers(),target)
-    
+
 if mode == 'list' :
     do_print_cons(containers)
 
@@ -94,7 +95,7 @@ if mode == 'start' :
 
 if mode == 'stop' :
     do_stop_cons(containers)
-    
+
 
 if mode == 'shell' :
     do_shell_cons(containers)
