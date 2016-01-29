@@ -75,3 +75,10 @@ start all containers
 stop all containers
 
     # smr stop
+
+
+there is a provisional ansible playbook for cloning a new machine
+
+use it like this
+
+ansible-playbook -K -i ansible/hosts ansible/playbooks/lxc-clone.yml -e 'con_name=newname'
