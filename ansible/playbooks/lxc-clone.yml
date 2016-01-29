@@ -44,6 +44,9 @@
 - name: setup new host
   hosts: container
   sudo: False
+  vars:
+    git_config_dir: ~{{ ansible_ssh_user }}/.config/git
+    user_gitignore: "{{ git_config_dir}}/ignore"
 
   tasks:
     - name: set username correctly for git config
@@ -51,3 +54,9 @@
         git config --global user.name '{{ ansible_ssh_user }}'  &&
         git config --global user.email '{{ ansible_ssh_user }}@milkroundabout.com'
         creates=~/.gitconfig
+
+    - name: make git config directory
+      file: dest={{ git_config_dir }} state=directory
+
+    - name: copy global gitignore
+      copy: src={{ user_gitignore }} dest={{ user_gitignore }}
