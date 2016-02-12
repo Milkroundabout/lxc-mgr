@@ -10,7 +10,7 @@ smr_prefix = 'con-smr-'
 
 # this is the name of all the smr instances
 machines = [ 'smr', 'shed', 'candidate-signups', 'smr-domain', 'dev',
-             'website', 'floorplan', 'companies' ]
+             'website', 'floorplan', 'companies', 'companies-old' ]
 
 # make a regexp that matches the interesting smr lxc names
 # using the prifix and the machine names

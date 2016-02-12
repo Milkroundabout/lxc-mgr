@@ -7,16 +7,16 @@
     con_prefix: con-smr
     con_name: ansible
     fq_con_name: '{{ con_prefix }}-{{ con_name }}'
-    backing_store: aufs
+    backing_store: btrfs
     lxc_base_dir: '/var/lib/lxc/{{ fq_con_name }}'
     con_config_file: '{{ lxc_base_dir }}/config'
-    hostname_file: '{{ lxc_base_dir }}/delta0/etc/hostname'
+    hostname_file: '{{ lxc_base_dir }}/rootfs/etc/hostname'
     username: '{{ ansible_user_id }}'
 
   tasks:
     - name: clone lxc from base
       command: >
-        lxc-clone con-smr-base
+        lxc-clone con-smr-base2
         -n {{ fq_con_name }}
         -s -B{{ backing_store }}
         creates={{ con_config_file }}
