@@ -10,8 +10,9 @@
     backing_store: btrfs
     lxc_base_dir: '/var/lib/lxc/{{ fq_con_name }}'
     con_config_file: '{{ lxc_base_dir }}/config'
-    hostname_file: '{{ lxc_base_dir }}/rootfs/etc/hostname'
     username: '{{ ansible_user_id }}'
+    hostname_file: '{{ lxc_base_dir }}/rootfs/etc/hostname'
+
 
   tasks:
     - name: clone lxc from base
@@ -21,29 +22,24 @@
         -s -B{{ backing_store }}
         creates={{ con_config_file }}
 
-    - name: set hostname in lxc config
-      replace: >
-        dest={{ hostname_file }}
-        regexp='^.*$'
-        replace='{{ con_name }}'
+    - name: register the new host as a target
+      add_host: >
+        name=container
+        ansible_ssh_host={{ fq_con_name }}.local.lxc
+        ansible_ssh-user={{ username }}
+
 
     - name: start the container up
       command: lxc-start -n {{ fq_con_name }} -d
 
-    - name: register the new host as a target
-      add_host: >
-        name=container
-        ansible_ssh_host={{ con_name }}.local.lxc
-        ansible_ssh-user={{ username }}
-
     - name: wait for ssh server to be running
-      wait_for: host={{ con_name}}.local.lxc port=22
+      wait_for: host={{ fq_con_name}}.local.lxc port=22
 
 # these tasks will run in the new container
 
 - name: setup new host
   hosts: container
-  sudo: False
+  sudo: ask
   vars:
     git_config_dir: ~{{ ansible_ssh_user }}/.config/git
     user_gitignore: "{{ git_config_dir}}/ignore"
@@ -60,3 +56,15 @@
 
     - name: copy global gitignore
       copy: src={{ user_gitignore }} dest={{ user_gitignore }}
+
+
+    - name: set hostname
+      sudo: true
+      replace: >
+        dest=/etc/hostname
+        regexp='^.*$'
+        replace='{{ con_name }}'
+
+    - name: reboot
+      sudo: true
+      shell: shutdown -r now
